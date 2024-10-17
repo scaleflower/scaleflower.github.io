@@ -1,3 +1,0 @@
-var posts=["2024/10/15/CF-VLESS从入门到精通/","2024/10/14/hello-world/"];function toRandomPost(){
-    pjax.loadUrl('/'+posts[Math.floor(Math.random() * posts.length)]);
-  };
