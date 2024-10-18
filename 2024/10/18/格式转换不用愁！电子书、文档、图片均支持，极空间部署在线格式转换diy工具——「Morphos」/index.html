@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"scaleflower.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="大家好，这里是Cherry，喜爱折腾、捡垃圾、玩数码，热衷于分享NAS、docker玩耍经验~ 前言平时大家在处理文档格式转换的时候，会觉得麻烦吗？比如需要购买WPS等第三方转换服务的会员服务，又比如需要从互联网上搜索各式各样的在线格式转换网站去处理文档，在处理文档的时候又特别担心资料上传后会造成隐私泄露。 今天，cherry给大家介绍一款自托管的格式转换工具——Morphos。通过该项目，我们可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="首页">
+<meta property="og:url" content="https://scaleflower.github.io/2024/10/18/%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2%E4%B8%8D%E7%94%A8%E6%84%81%EF%BC%81%E7%94%B5%E5%AD%90%E4%B9%A6%E3%80%81%E6%96%87%E6%A1%A3%E3%80%81%E5%9B%BE%E7%89%87%E5%9D%87%E6%94%AF%E6%8C%81%EF%BC%8C%E6%9E%81%E7%A9%BA%E9%97%B4%E9%83%A8%E7%BD%B2%E5%9C%A8%E7%BA%BF%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2diy%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94%E3%80%8CMorphos%E3%80%8D/index.html">
+<meta property="og:site_name" content="首页">
+<meta property="og:description" content="大家好，这里是Cherry，喜爱折腾、捡垃圾、玩数码，热衷于分享NAS、docker玩耍经验~ 前言平时大家在处理文档格式转换的时候，会觉得麻烦吗？比如需要购买WPS等第三方转换服务的会员服务，又比如需要从互联网上搜索各式各样的在线格式转换网站去处理文档，在处理文档的时候又特别担心资料上传后会造成隐私泄露。 今天，cherry给大家介绍一款自托管的格式转换工具——Morphos。通过该项目，我们可">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://am.zdmimg.com/202409/24/66f2c8f96ca953525.png_e1080.jpg">
+<meta property="og:image" content="https://qnam.smzdm.com/202409/24/66f2c8f8b8a5d3608.png_e1080.jpg">
+<meta property="og:image" content="https://am.zdmimg.com/202409/24/66f2c8f844f603608.png_e1080.jpg">
+<meta property="og:image" content="https://qnam.smzdm.com/202409/24/66f2c8f81bb243608.png_e1080.jpg">
+<meta property="og:image" content="https://qnam.smzdm.com/202409/24/66f2c8f85c3a63608.png_e1080.jpg">
+<meta property="og:image" content="https://am.zdmimg.com/202409/24/66f2c8f90c33d3525.png_e1080.jpg">
+<meta property="og:image" content="https://am.zdmimg.com/202409/24/66f2c8f9c77f13525.png_e1080.jpg">
+<meta property="og:image" content="https://qnam.smzdm.com/202409/24/66f2c8f8e14d33608.png_e1080.jpg">
+<meta property="og:image" content="https://am.zdmimg.com/202409/24/66f2c8f9622b43525.png_e1080.jpg">
+<meta property="og:image" content="https://am.zdmimg.com/202409/24/66f2c8f9b5a763525.png_e1080.jpg">
+<meta property="og:image" content="https://qnam.smzdm.com/202409/24/66f2c8f9afa783525.png_e1080.jpg">
+<meta property="og:image" content="https://am.zdmimg.com/202409/24/66f2c8fa0a7424807.png_e1080.jpg">
+<meta property="og:image" content="https://am.zdmimg.com/202409/24/66f2c8fa57d9a4807.png_e1080.jpg">
+<meta property="og:image" content="https://qnam.smzdm.com/202409/24/66f2c8fb6d1568744.png_e1080.jpg">
+<meta property="og:image" content="https://am.zdmimg.com/202409/24/66f2c8fa029724807.png_e1080.jpg">
+<meta property="og:image" content="https://qnam.smzdm.com/202409/24/66f2c900e99166324.png_e1080.jpg">
+<meta property="og:image" content="https://am.zdmimg.com/202409/24/66f2c901384787810.png_e1080.jpg">
+<meta property="og:image" content="https://qnam.smzdm.com/202409/24/66f2c9014e84a7810.png_e1080.jpg">
+<meta property="og:image" content="https://am.zdmimg.com/202409/24/66f2c93aacbac9730.png_e1080.jpg">
+<meta property="og:image" content="https://qnam.smzdm.com/202409/24/66f2c93ee47077244.png_e1080.jpg">
+<meta property="og:image" content="https://qnam.smzdm.com/202409/24/66f2c94aa33724987.png_e1080.jpg">
+<meta property="og:image" content="https://qnam.smzdm.com/202409/24/66f2c95304b113090.png_e1080.jpg">
+<meta property="article:published_time" content="2024-10-18T07:58:20.133Z">
+<meta property="article:modified_time" content="2024-10-18T07:58:20.660Z">
+<meta property="article:author" content="Scaleflower">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://am.zdmimg.com/202409/24/66f2c8f96ca953525.png_e1080.jpg">
+
+<link rel="canonical" href="https://scaleflower.github.io/2024/10/18/%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2%E4%B8%8D%E7%94%A8%E6%84%81%EF%BC%81%E7%94%B5%E5%AD%90%E4%B9%A6%E3%80%81%E6%96%87%E6%A1%A3%E3%80%81%E5%9B%BE%E7%89%87%E5%9D%87%E6%94%AF%E6%8C%81%EF%BC%8C%E6%9E%81%E7%A9%BA%E9%97%B4%E9%83%A8%E7%BD%B2%E5%9C%A8%E7%BA%BF%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2diy%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94%E3%80%8CMorphos%E3%80%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | 首页</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">首页</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">0</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">8</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://scaleflower.github.io/2024/10/18/%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2%E4%B8%8D%E7%94%A8%E6%84%81%EF%BC%81%E7%94%B5%E5%AD%90%E4%B9%A6%E3%80%81%E6%96%87%E6%A1%A3%E3%80%81%E5%9B%BE%E7%89%87%E5%9D%87%E6%94%AF%E6%8C%81%EF%BC%8C%E6%9E%81%E7%A9%BA%E9%97%B4%E9%83%A8%E7%BD%B2%E5%9C%A8%E7%BA%BF%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2diy%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94%E3%80%8CMorphos%E3%80%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Scaleflower">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="首页">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-10-18 13:28:20" itemprop="dateCreated datePublished" datetime="2024-10-18T13:28:20+05:30">2024-10-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><strong>大家好，这里是Cherry，喜爱折腾、捡垃圾、玩数码，热衷于分享<a target="_blank" rel="noopener" href="https://www.smzdm.com/ju/sp3qr1k/">NAS</a>、docker玩耍经验~</strong></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>平时大家在处理文档格式转换的时候，会觉得麻烦吗？比如需要购买WPS等第三方转换服务的会员服务，又比如需要从互联网上搜索各式各样的在线格式转换网站去处理文档，<strong>在处理文档的时候又特别担心资料上传后会造成隐私泄露</strong>。</p>
+<p>今天，cherry给大家介绍一款自托管的格式转换工具——Morphos。通过该项目，<strong>我们可以上传<a target="_blank" rel="noopener" href="https://www.smzdm.com/ju/sp4x11p/">电脑</a>、<a target="_blank" rel="noopener" href="https://www.smzdm.com/fenlei/zhinengshouji/">手机</a>中的照片、文件资料</strong>，然后转换成允许范围内的其它格式，这些资料既可以下载到电脑里，又可以直接保存在NAS中，让NAS在文件管理和分享中更进一步。</p>
+<blockquote>
+<p>Morphos是一款支持图片、文件格式转换的自托管服务，特别适合我们在NAS端转换一些高度敏感个人数据的文件，目前Morphos支持转换的内容以图片为主，<strong>文件格式正在不断更新中</strong>。</p>
+</blockquote>
+<p>🔻Morphos支持转换的格式列表</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_2/"><img src="https://am.zdmimg.com/202409/24/66f2c8f96ca953525.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<hr>
+<h2 id="一、部署教程"><a href="#一、部署教程" class="headerlink" title="一、部署教程"></a>一、部署教程</h2><p><strong>第一步：</strong> morphos的镜像是从github中下载的，所以有没有网络优化都没有问题。通过路径【docker】-【镜像】-【仓库】-【自定义拉取】，搜索并拉取镜像【<code>ghcr.io/danvergara/morphos-server:latest</code>】</p>
+<p>理论上github的网络会差一些，所有拉取速度会比较慢，但是从<a target="_blank" rel="noopener" href="https://www.smzdm.com/ju/sxq1mk1/">极空间</a>的拉取速度看，应该是官方做了优化，下载速度比docker.io还要快，1分钟不到就下载好了。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_3/"><img src="https://qnam.smzdm.com/202409/24/66f2c8f8b8a5d3608.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p><strong>第二步：</strong>在镜像管理页面，选择morpho这个镜像，点击添加到容器，或者直接双击镜像都可以进入容器部署页面。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_4/"><img src="https://am.zdmimg.com/202409/24/66f2c8f844f603608.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>建议大家取消掉【<code>性能限制】</code>，然后容器名称根据自己的习惯修改一下，本容器只需要设置文件夹路径、端口两个参数即可。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_5/"><img src="https://qnam.smzdm.com/202409/24/66f2c8f81bb243608.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p><strong>第三步：</strong>在【文件夹路径】中，我们需要将项目的缓存路径&#x2F;tmp映射出来，这样如果不想下载文件的，转换以后的资料就可以从NAS里直接找到，很方便，选择【添加】-【添加文件&#x2F;文件夹】。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_6/"><img src="https://qnam.smzdm.com/202409/24/66f2c8f85c3a63608.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>点击右上角的【新建文件夹】根据需求自定义文件夹位置，我的位置是【<code>个人空间/docker/morphos】</code>，方便对docker的持久化<a target="_blank" rel="noopener" href="https://www.smzdm.com/ju/s2qrjnp/">存储</a>对统一管理。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_7/"><img src="https://am.zdmimg.com/202409/24/66f2c8f90c33d3525.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>右边的则是morphots容器内【<code>/tmp】</code>就可以了。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_8/"><img src="https://am.zdmimg.com/202409/24/66f2c8f9c77f13525.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p><strong>第四步：</strong>设置【端口】，默认使用的是8080端口，但是<strong>这个端口极空间是不允许远程访问的</strong>，所以请更换为别的端口，比如我使用了18080端口，配置完成以后点击应用部署容器。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_9/"><img src="https://qnam.smzdm.com/202409/24/66f2c8f8e14d33608.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>morphos容器启动速度飞快，几秒就正常运行了，而且cpu、内存占用很低，我们在极空间的docker里可以看到每一个容器的使用情况，一目了然。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_10/"><img src="https://am.zdmimg.com/202409/24/66f2c8f9622b43525.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p><strong>第五步：</strong>打开极空间的远程访问应用，在url里添加【<code>127.0.0.1:18080】</code>，取名morphos，然后我们就可以在PC、APP端，使用远程访问功能打开我们的格式转换工具了，<strong>使用体感不要太6</strong>。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_11/"><img src="https://am.zdmimg.com/202409/24/66f2c8f9b5a763525.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<hr>
+<h2 id="二、系统使用"><a href="#二、系统使用" class="headerlink" title="二、系统使用"></a>二、系统使用</h2><p>morphos的系统界面十分简洁，右上角支持切换白天模式、黑夜模式。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_12/"><img src="https://qnam.smzdm.com/202409/24/66f2c8f9afa783525.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>中间就是一个文件上传选择款，以及待转换格式列表，以及一个上传按钮。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_13/"><img src="https://am.zdmimg.com/202409/24/66f2c8fa0a7424807.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>我们从电脑端选择文件以后，morphos会自动根据选择的文件类型生成<strong>可转换列表</strong>，我们选择好需要转换的格式以后，点击Upload进行在线转换。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_14/"><img src="https://am.zdmimg.com/202409/24/66f2c8fa57d9a4807.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>可以看到，PDF支持equb、mobi的电子书格式，也支持docx的文档格式，以及各式各样的图片格式。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_15/"><img src="https://qnam.smzdm.com/202409/24/66f2c8fb6d1568744.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>转换完成以后，<strong>文档类的会自动整理成压缩包供下载</strong>，图片类的则是直接转换为各类图片格式。我们点击Download按钮就可以将转换好的文件、图片下载到电脑里了。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_16/"><img src="https://am.zdmimg.com/202409/24/66f2c8fa029724807.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>如果不想把资料下载到电脑里的，也没关系，记得我们之前映射的【<code>/tmp】</code>文件不？所有转换成功的文件都可以在极空间的文件目录里找到。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_17/"><img src="https://qnam.smzdm.com/202409/24/66f2c900e99166324.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>比如有一些压缩包格式的文件，通过极空间客户端，是可以直接双击在线解压的，并且在解压的时候，我们还可以根据编码格式不同进行选择，一般建议使用默认编码或者UTF-8。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_18/"><img src="https://am.zdmimg.com/202409/24/66f2c901384787810.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>而文档类文件，在解锁完成后，通过极空间内置的WPS软件进行编辑。特别值得一提的是，极空间内置的WPS功能虽然无法登录WPS会员，但是会自动进行历史版本控制，还可以实现不同用户间的协作办公。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_19/"><img src="https://qnam.smzdm.com/202409/24/66f2c9014e84a7810.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>而图片格式也是可以在ZOS中直接打开的，比如webp等格式，都正常在线浏览，没有问题。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_20/"><img src="https://am.zdmimg.com/202409/24/66f2c93aacbac9730.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>说完PC端，我再来演示一下手机端是如何操作的，同样通过极空间手机APP的远程访问功能打开morphos的URL链接。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_21/"><img src="https://qnam.smzdm.com/202409/24/66f2c93ee47077244.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>可以看到移动端的页面是自适应的，我是苹果手机，可以上传图片、文件等资料，安卓的话选择自由度会更高一些。具体的操作方法和PC端是一致的，但是移动端目前无法下载ZIP、PDF等格式，图片的话需要长按保存。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_22/"><img src="https://qnam.smzdm.com/202409/24/66f2c94aa33724987.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<p>对于无法下载的这些资料，我们可以在极空间APP的个人空间文件夹里找到，这个路径就是之前映射出来的路径，移动端的在线解压、文档编辑功能也都集成了，体验感极佳。</p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/aklx8gq8/pic_23/"><img src="https://qnam.smzdm.com/202409/24/66f2c95304b113090.png_e1080.jpg" alt="格式转换不用愁！电子书、文档、图片均支持，极空间部署在线格式转换diy工具——「Morphos」"></a></p>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>极空间在NAS行业内，一直以简单易用、解决用户痛点而出名，因此十分推荐NAS新手入手，不论是极空间Z4 Pro、Z423型号，都拥有标准版、性能版两套配置，满足新手用户到老手的硬件要求。</p>
+<p>在系统体验上，除了极影视等娱乐应用外，诸如本文提到的客户端内网穿透、远程访问功能，都十分实用，能为用户节约不少折腾网络、配置网络的时间。</p>
+<p>而格式转换这个需求，在我们生活和办公中其实都挺常见了，通过极空间docker部署morphs项目后，不仅能为极空间补充更多的免费功能，更能做好NAS数据存储和数据隐私保护的目标，这也是本文推荐应用的理由~~</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/18/R%E6%8E%A2%E9%95%BF%E5%88%B7ARM%E6%95%99%E7%A8%8B/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/10/18/%E5%90%84%E5%B9%B3%E5%8F%B0Cloudflare%20WARP%20%E6%94%AF%E6%8C%81MASQUE%E5%8D%8F%E8%AE%AE%E6%8C%87%E5%8D%97/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E9%83%A8%E7%BD%B2%E6%95%99%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">一、部署教程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%B3%BB%E7%BB%9F%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">二、系统使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Scaleflower</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/scaleflower" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;scaleflower" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://youtube.com/" title="YouTube → https:&#x2F;&#x2F;youtube.com&#x2F;" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>YouTube</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://kp.m-team.cc/index" title="https:&#x2F;&#x2F;kp.m-team.cc&#x2F;index" rel="noopener" target="_blank">M-Team</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Scaleflower</span>
+</div>
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
