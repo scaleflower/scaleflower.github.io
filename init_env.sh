@@ -127,3 +127,11 @@ fi
 echo -e "\n${GREEN}🚀 环境初始化完成！执行以下命令启动："
 echo -e "   hexo server  # 本地预览"
 echo -e "   ./deploy_post.sh \"文章标题\"  # 发布新文章${NC}"
+# 首次运行前：
+# chmod +x init_env.sh
+# 国内用户加速（可选）：
+# 在安装Node.js前设置镜像源
+# export NODEJS_ORG_MIRROR=http://npmmirror.com/mirrors/node
+# 权限处理：
+#sudo visudo
+#username ALL=(ALL) NOPASSWD: /usr/bin/apt-get, /usr/bin/yum
