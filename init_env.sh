@@ -29,8 +29,8 @@ clean_environment() {
     fi
 }
 
-# 处理命令行参数
-if [ "$1" == "--force-clean" ]; then
+# 处理命令行参数（增加参数容错）
+if [[ "$1" == "--force-clean" ]]; then
     if clean_environment; then
         FORCE_CLEAN=true
     else
@@ -38,26 +38,27 @@ if [ "$1" == "--force-clean" ]; then
     fi
 fi
 
-# 检查依赖项
+# 检查依赖项（修复语法错误关键点）
 echo -e "\n${GREEN}🔍 检查系统依赖...${NC}"
 for cmd in git node npm npx; do
     if ! command -v $cmd &> /dev/null; then
         echo -e "${RED}❌ 未找到 $cmd，请先安装${NC}"
         exit 1
-    done
+    fi  # 将错误的 done 改为 fi
 done
 echo -e "${GREEN}✅ 所有依赖已安装${NC}"
 
-# 仓库同步逻辑
+# 仓库同步逻辑（增强MacOS兼容性）
 echo -e "\n${GREEN}📥 仓库同步检查...${NC}"
 if [ -d "$REPO_DIR" ]; then
     echo -e "${YELLOW}⚠️  检测到已存在的本地仓库${NC}"
     
     if ! $FORCE_CLEAN; then
+        PS3="请选择操作 (输入数字): "  # 增加select提示符
         echo -e "请选择操作："
         select action in "保留并更新" "删除并重新克隆" "退出"; do
-            case $action in
-                "保留并更新")
+            case $REPLY in  # 改用数字判断提升兼容性
+                1)
                     echo -e "\n${GREEN}🔄 尝试更新仓库...${NC}"
                     cd "$REPO_DIR" || exit 1
                     if ! git pull origin $BRANCH; then
@@ -70,24 +71,30 @@ if [ -d "$REPO_DIR" ]; then
                     cd ..
                     break
                     ;;
-                "删除并重新克隆")
+                2)
                     if clean_environment; then
                         FORCE_CLEAN=true
                     fi
                     break
                     ;;
-                "退出")
+                3)
                     echo -e "${GREEN}👋 操作已取消${NC}"
                     exit 0
+                    ;;
+                *)
+                    echo -e "${RED}❌ 无效选项，请重新选择${NC}"
                     ;;
             esac
         done
     fi
 fi
 
-# 克隆仓库逻辑
+# 克隆仓库逻辑（增加目录存在检查）
 if [ ! -d "$REPO_DIR" ] || $FORCE_CLEAN; then
     echo -e "\n${GREEN}🔃 重新克隆仓库...${NC}"
+    if [ -d "$REPO_DIR" ]; then  # 额外安全检查
+        rm -rf "$REPO_DIR"
+    fi
     git clone -b $BRANCH --single-branch $REPO_URL $REPO_DIR || {
         echo -e "${RED}❌ 克隆失败！错误代码：$?"
         echo -e "可能原因："
@@ -98,42 +105,58 @@ if [ ! -d "$REPO_DIR" ] || $FORCE_CLEAN; then
     }
 fi
 
-# 进入仓库目录
-cd "$REPO_DIR" || exit 1
+# 进入仓库目录（增加错误处理）
+cd "$REPO_DIR" || {
+    echo -e "${RED}❌ 无法进入仓库目录${NC}"
+    exit 1
+}
 
-# 安装 npm 依赖
+# 安装 npm 依赖（增加网络重试）
 echo -e "\n${GREEN}📦 安装 Node.js 依赖...${NC}"
 if [ ! -d "node_modules" ]; then
-    npm install --loglevel=error || {
-        echo -e "${RED}❌ 依赖安装失败！${NC}"
-        exit 1
-    }
+    for attempt in {1..3}; do
+        npm install --loglevel=error && break || {
+            if [ $attempt -eq 3 ]; then
+                echo -e "${RED}❌ 依赖安装失败！请检查："
+                echo -e "1. 网络代理设置"
+                echo -e "2. npm registry 配置"
+                echo -e "3. 服务器状态${NC}"
+                exit 1
+            fi
+            echo -e "${YELLOW}⚠️ 安装失败，正在重试 (第$attempt次)...${NC}"
+        }
+    done
 else
     echo -e "${YELLOW}✅ 依赖已存在 (node_modules)${NC}"
 fi
 
-# 初始化主题子模块
+# 初始化主题子模块（增加空目录检查）
 echo -e "\n${GREEN}🎨 初始化主题子模块...${NC}"
 if [ -f ".gitmodules" ]; then
-    git submodule update --init --recursive || {
-        echo -e "${RED}❌ 子模块初始化失败！${NC}"
-        exit 1
-    }
+    if [ -z "$(ls -A themes)" ]; then  # 空目录时才初始化
+        git submodule update --init --recursive || {
+            echo -e "${RED}❌ 子模块初始化失败！${NC}"
+            exit 1
+        }
+    else
+        echo -e "${YELLOW}✅ 主题已存在${NC}"
+    fi
 fi
 
-# 创建示例文章
+# 创建示例文章（增加时间戳防冲突）
 echo -e "\n${GREEN}📝 创建示例文章...${NC}"
-npx hexo new post "Hello-World" --silent
+post_title="Hello-World-$(date +%s)"
+npx hexo new post "$post_title" --silent
 
-# 显示完成信息
+# 显示完成信息（增加路径提示）
 echo -e "\n${GREEN}🎉 环境初始化完成！${NC}"
 echo -e "接下来可以执行以下操作："
-echo -e "1. 编写文章：   cd $REPO_DIR/source/_posts"
-echo -e "2. 本地预览：   npx hexo server"
-echo -e "3. 部署发布：   ../deploy_post.sh"
+echo -e "1. 编写文章：   cd $REPO_DIR/source/_posts && ls -l"
+echo -e "2. 本地预览：   cd $REPO_DIR && npx hexo server"
+echo -e "3. 部署发布：   cd .. && ./deploy_post.sh"
 
-# 安全提醒
+# 安全提醒（增加备份提示）
 echo -e "\n${YELLOW}⚠️  重要提示："
-echo -e "1. 定期提交本地修改到GitHub"
-echo -e "2. 重要修改前使用 git branch 创建新分支"
-echo -e "3. 使用 --force-clean 参数需谨慎${NC}"
+echo -e "1. 定期运行 'git status' 检查修改"
+echo -e "2. 使用 'git stash' 暂存临时修改"
+echo -e "3. 推荐配置 git 自动备份钩子${NC}"
