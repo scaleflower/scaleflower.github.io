@@ -105,6 +105,6 @@ theme: anzhiyu
 
 deploy:
   type: git
-  repo: https://github.com/scaleflower/scaleflower.github.io.git # https://bitbucket.org/JohnSmith/johnsmith.bitbucket.io
+  repo: git@github.com:scaleflower/scaleflower.github.io.git
   branch: main
   #message: "初始化更新blog"
