@@ -1,10 +1,10 @@
 ---
-title: Hello-World-Test
+title: 什么是MCP
 cover: https://img.090227.xyz/file/ae62475a131f3734a201c.png
 swiper_index: 10
 top_group_index: 10
 background: '#fff'
-date: 2025-03-20 09:34:25
+date: 2025-03-20 12:56:51
 updated:
 tags:
 categories:
@@ -48,4 +48,5 @@ ai:
     height: 100%;
 }
 </style>
-This is a deployment test
+
+MCP的含义
