@@ -1,216 +1,139 @@
 #!/bin/bash
-# 初始化Hexo环境并同步仓库（跨平台版）
-# 支持系统：Ubuntu/Debian/CentOS/macOS
 
 # 颜色定义
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-NC='\033[0m' # No Color
+YELLOW='\033[1;33m'
+NC='\033[0m' # 重置颜色
 
-# 系统检测
-OS_TYPE=""
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    if [ -f /etc/redhat-release ]; then
-        OS_TYPE="centos"
-    elif [ -f /etc/lsb-release ]; then
-        OS_TYPE="ubuntu"
+# 配置参数
+REPO_DIR="scaleflower.github.io"
+REPO_URL="git@github.com:scaleflower/scaleflower.github.io.git"
+BRANCH="hexo"
+FORCE_CLEAN=false
+
+# 显示欢迎信息
+echo -e "${GREEN}🚀 Hexo 博客环境初始化脚本 v2.0${NC}"
+echo -e "${YELLOW}📅 最后更新: 2023-12-01${NC}\n"
+
+# 清理环境函数
+clean_environment() {
+    echo -e "\n${RED}⚠️  即将执行危险操作！${NC}"
+    read -p "是否确认删除整个仓库目录并重新克隆？[y/N] " confirm
+    if [[ $confirm =~ ^[Yy]$ ]]; then
+        echo -e "${YELLOW}🗑  删除本地仓库...${NC}"
+        rm -rf "$REPO_DIR" && return 0
+    else
+        echo -e "${GREEN}✅ 取消清理操作${NC}"
+        return 1
     fi
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    OS_TYPE="macos"
+}
+
+# 处理命令行参数
+if [ "$1" == "--force-clean" ]; then
+    if clean_environment; then
+        FORCE_CLEAN=true
+    else
+        exit 1
+    fi
 fi
 
-# 依赖检查函数
-check_dependencies() {
-    echo -e "\n${GREEN}🔍 检查系统依赖..."
+# 检查依赖项
+echo -e "\n${GREEN}🔍 检查系统依赖...${NC}"
+for cmd in git node npm npx; do
+    if ! command -v $cmd &> /dev/null; then
+        echo -e "${RED}❌ 未找到 $cmd，请先安装${NC}"
+        exit 1
+    done
+done
+echo -e "${GREEN}✅ 所有依赖已安装${NC}"
+
+# 仓库同步逻辑
+echo -e "\n${GREEN}📥 仓库同步检查...${NC}"
+if [ -d "$REPO_DIR" ]; then
+    echo -e "${YELLOW}⚠️  检测到已存在的本地仓库${NC}"
     
-    # 检查Git
-    if ! command -v git &> /dev/null; then
-        echo -e "${YELLOW}⚠️  Git未安装，正在自动安装...${NC}"
-        install_git
-    else
-        echo -e "${GREEN}✅  Git已安装（版本：$(git --version 2>&1 | cut -d' ' -f3）)${NC}"
+    if ! $FORCE_CLEAN; then
+        echo -e "请选择操作："
+        select action in "保留并更新" "删除并重新克隆" "退出"; do
+            case $action in
+                "保留并更新")
+                    echo -e "\n${GREEN}🔄 尝试更新仓库...${NC}"
+                    cd "$REPO_DIR" || exit 1
+                    if ! git pull origin $BRANCH; then
+                        echo -e "\n${RED}❌ 更新失败！建议操作："
+                        echo -e "1. 手动解决冲突"
+                        echo -e "2. 使用 --force-clean 参数强制清理"
+                        echo -e "3. 检查网络连接${NC}"
+                        exit 1
+                    fi
+                    cd ..
+                    break
+                    ;;
+                "删除并重新克隆")
+                    if clean_environment; then
+                        FORCE_CLEAN=true
+                    fi
+                    break
+                    ;;
+                "退出")
+                    echo -e "${GREEN}👋 操作已取消${NC}"
+                    exit 0
+                    ;;
+            esac
+        done
     fi
+fi
 
-    # 检查Node.js
-    if ! command -v node &> /dev/null; then
-        echo -e "${YELLOW}⚠️  Node.js未安装，正在自动安装...${NC}"
-        install_nodejs
-    else
-        echo -e "${GREEN}✅  Node.js已安装（版本：$(node -v）)${NC}"
-    fi
-
-    # 检查npm
-    if ! command -v npm &> /dev/null; then
-        echo -e "${RED}❌  npm未正确安装，请手动安装后重试${NC}"
-        exit 1
-    else
-        echo -e "${GREEN}✅  npm已安装（版本：$(npm -v）)${NC}"
-    fi
-}
-
-# Git安装函数
-install_git() {
-    case $OS_TYPE in
-        "ubuntu"|"debian")
-            sudo apt-get update -qq
-            sudo apt-get install -y git-core
-            ;;
-        "centos")
-            sudo yum install -y git
-            ;;
-        "macos")
-            if ! command -v brew &> /dev/null; then
-                echo -e "${RED}❌ 需要Homebrew安装Git，请先安装Homebrew${NC}"
-                exit 1
-            fi
-            brew install git
-            ;;
-        *)
-            echo -e "${RED}❌ 不支持的OS类型：$OS_TYPE${NC}"
-            exit 1
-            ;;
-    esac
-    echo -e "${GREEN}✅  Git安装完成${NC}"
-}
-
-# Node.js安装函数
-install_nodejs() {
-    case $OS_TYPE in
-        "ubuntu"|"debian")
-            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-            sudo apt-get install -y nodejs
-            ;;
-        "centos")
-            curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
-            sudo yum install -y nodejs
-            ;;
-        "macos")
-            if ! command -v brew &> /dev/null; then
-                echo -e "${RED}❌ 需要Homebrew安装Node.js，请先安装Homebrew${NC}"
-                exit 1
-            fi
-            brew install node@18
-            ;;
-        *)
-            echo -e "${RED}❌ 不支持的OS类型：$OS_TYPE${NC}"
-            exit 1
-            ;;
-    esac
-    echo -e "${GREEN}✅  Node.js安装完成${NC}"
-}
-
-# SSH配置验证函数
-setup_ssh() {
-    echo -e "\n${GREEN}🔍 验证SSH配置..."
-    
-    mkdir -p ~/.ssh
-    chmod 700 ~/.ssh
-
-    if [[ ! -f ~/.ssh/id_rsa || ! -f ~/.ssh/id_rsa.pub ]]; then
-        echo -e "${RED}❌ 密钥文件缺失：~/.ssh/id_rsa 或 id_rsa.pub 不存在"
-        echo -e "请执行以下操作："
-        echo -e "1. 将SSH密钥对复制到 ~/.ssh 目录"
-        echo -e "2. 或运行 ssh-keygen 生成新密钥对${NC}"
-        exit 1
-    fi
-
-    chmod 600 ~/.ssh/id_rsa >/dev/null 2>&1 || {
-        echo -e "${RED}❌ 无法设置私钥权限，请检查文件所有权${NC}"
-        exit 1
-    }
-    chmod 644 ~/.ssh/id_rsa.pub
-
-    if [ -z "$SSH_AUTH_SOCK" ]; then
-        echo -e "${YELLOW}⚠️  启动SSH代理..."
-        eval "$(ssh-agent -s)" >/dev/null
-    fi
-
-    if ! ssh-add -l | grep -q "$(ssh-keygen -lf ~/.ssh/id_rsa | awk '{print $2}')"; then
-        echo -e "🔑 添加SSH密钥到代理..."
-        ssh-add ~/.ssh/id_rsa || {
-            echo -e "${RED}❌ 密钥加载失败！可能原因："
-            echo -e "1. 密钥受密码保护但未解锁"
-            echo -e "2. 密钥文件格式错误${NC}"
-            exit 1
-        }
-    fi
-
-    if ! grep -q 'github.com' ~/.ssh/known_hosts 2>/dev/null; then
-        echo -e "🔒 添加GitHub到已知主机..."
-        ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts 2>/dev/null
-    fi
-
-    echo -e "📡 测试GitHub连接..."
-    if ! ssh -T git@github.com 2>&1 | grep -i -e "success" -e "authenticated"; then
-        echo -e "${RED}❌ SSH认证失败！请检查："
-        echo -e "1. 公钥是否添加到GitHub账户"
-        echo -e "2. 网络代理设置（如果有）"
-        echo -e "3. 防火墙是否允许SSH连接${NC}"
-        exit 1
-    fi
-    echo -e "${GREEN}✅ SSH配置验证通过！${NC}"
-}
-
-# 主流程
-echo -e "\n${GREEN}🌐 开始环境检查...${NC}"
-check_dependencies
-
-setup_ssh
-
-echo -e "\n${GREEN}📥 克隆仓库...${NC}"
-repo_dir="scaleflower.github.io"
-if [ ! -d "$repo_dir" ]; then
-    git clone -b hexo --single-branch git@github.com:scaleflower/scaleflower.github.io.git || {
-        echo -e "${RED}❌ 仓库克隆失败！错误代码：$?"
-        echo -e "尝试以下解决方案："
-        echo -e "1. 检查网络连接"
-        echo -e "2. 确认公钥已添加到GitHub账户"
-        echo -e "3. 删除目录重试：rm -rf $repo_dir${NC}"
-        exit 1
-    }
-    cd "$repo_dir" || exit 1
-else
-    echo -e "${YELLOW}⚠️  已存在本地仓库，尝试更新...${NC}"
-    cd "$repo_dir" || exit 1
-    git pull origin hexo || {
-        echo -e "${RED}❌ 仓库更新失败！建议操作："
-        echo -e "1. 检查本地修改：git status"
-        echo -e "2. 备份后重置：git reset --hard origin/hexo${NC}"
+# 克隆仓库逻辑
+if [ ! -d "$REPO_DIR" ] || $FORCE_CLEAN; then
+    echo -e "\n${GREEN}🔃 重新克隆仓库...${NC}"
+    git clone -b $BRANCH --single-branch $REPO_URL $REPO_DIR || {
+        echo -e "${RED}❌ 克隆失败！错误代码：$?"
+        echo -e "可能原因："
+        echo -e "1. SSH 密钥未配置"
+        echo -e "2. 仓库权限不足"
+        echo -e "3. 网络连接问题${NC}"
         exit 1
     }
 fi
 
-echo -e "\n${GREEN}📦 安装项目依赖...${NC}"
+# 进入仓库目录
+cd "$REPO_DIR" || exit 1
+
+# 安装 npm 依赖
+echo -e "\n${GREEN}📦 安装 Node.js 依赖...${NC}"
 if [ ! -d "node_modules" ]; then
-    sudo chown -R $(whoami) ~/.npm 2>/dev/null
-    npm config set unsafe-perm true 2>/dev/null
-    
-    npm install --force --silent || {
-        echo -e "${RED}❌ 依赖安装失败！尝试："
-        echo -e "1. 删除 node_modules 重试"
-        echo -e "2. 设置淘宝镜像：npm config set registry https://registry.npmmirror.com${NC}"
+    npm install --loglevel=error || {
+        echo -e "${RED}❌ 依赖安装失败！${NC}"
         exit 1
     }
-    npm install hexo-cli -g --silent
-    npm install hexo-deployer-git --save --silent
 else
-    echo -e "${YELLOW}⚠️  已存在 node_modules，跳过依赖安装${NC}"
+    echo -e "${YELLOW}✅ 依赖已存在 (node_modules)${NC}"
 fi
 
-echo -e "\n${GREEN}🎨 初始化主题...${NC}"
-if [ ! -d "themes/anzhiyu" ]; then
-    git submodule update --init --recursive --quiet || {
-        echo -e "${RED}❌ 主题初始化失败！请检查："
-        echo -e "1. .gitmodules 文件配置"
-        echo -e "2. 子模块仓库权限${NC}"
+# 初始化主题子模块
+echo -e "\n${GREEN}🎨 初始化主题子模块...${NC}"
+if [ -f ".gitmodules" ]; then
+    git submodule update --init --recursive || {
+        echo -e "${RED}❌ 子模块初始化失败！${NC}"
         exit 1
     }
-    echo -e "${GREEN}✅ 主题初始化完成${NC}"
-else
-    echo -e "${YELLOW}⚠️  主题已存在，跳过初始化${NC}"
 fi
 
-echo -e "\n${GREEN}🚀 环境初始化完成！执行以下命令启动："
-echo -e "   hexo server  # 本地预览"
-echo -e "   ./deploy_post.sh \"文章标题\"  # 发布新文章${NC}"
+# 创建示例文章
+echo -e "\n${GREEN}📝 创建示例文章...${NC}"
+npx hexo new post "Hello-World" --silent
+
+# 显示完成信息
+echo -e "\n${GREEN}🎉 环境初始化完成！${NC}"
+echo -e "接下来可以执行以下操作："
+echo -e "1. 编写文章：   cd $REPO_DIR/source/_posts"
+echo -e "2. 本地预览：   npx hexo server"
+echo -e "3. 部署发布：   ../deploy_post.sh"
+
+# 安全提醒
+echo -e "\n${YELLOW}⚠️  重要提示："
+echo -e "1. 定期提交本地修改到GitHub"
+echo -e "2. 重要修改前使用 git branch 创建新分支"
+echo -e "3. 使用 --force-clean 参数需谨慎${NC}"
