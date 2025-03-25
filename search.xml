@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>低代码编程，恐怕不会成功</title>
+      <link href="/2025/03/25/%E4%BD%8E%E4%BB%A3%E7%A0%81%E7%BC%96%E7%A8%8B%EF%BC%8C%E6%81%90%E6%80%95%E4%B8%8D%E4%BC%9A%E6%88%90%E5%8A%9F/"/>
+      <url>/2025/03/25/%E4%BD%8E%E4%BB%A3%E7%A0%81%E7%BC%96%E7%A8%8B%EF%BC%8C%E6%81%90%E6%80%95%E4%B8%8D%E4%BC%9A%E6%88%90%E5%8A%9F/</url>
+      
+        <content type="html"><![CDATA[<div class="video-container">[up主专用，视频内嵌代码贴在这]</div><style>.video-container {    position: relative;    width: 100%;    padding-top: 56.25%; /* 16:9 aspect ratio (height/width = 9/16 * 100%) */}.video-container iframe {    position: absolute;    top: 0;    left: 0;    width: 100%;    height: 100%;}</style><p>低代码编程，恐怕不会成功<br>这十几年，一批批程序员前仆后继，去搞低代码编程（包括无代码编程）。光在我身边，就有三四批。</p><p>他们搞的低代码编程，我理解就是通过图形界面，拖拉各种组件，自动生成软件 UI 的底层代码，减少手工编码。</p><p>这个想法很好，确实很多人需要，尤其不懂编程的人，这简直是生成程序的唯一可用方式。</p><p>但是很奇怪，他们无一例外都失败了，开发出来的低代码工具，开始还有一些好奇的用户，很快就不来了，用户越来越少，后来即使开源了，也没人用。</p><p>更奇怪的是，这似乎不是偶然现象，业界所有的低代码工具好像都不成功，至少我想不出成功的例子，哪一个受欢迎的应用程序是用低代码工具生成的。</p><p>它的背后有什么原因吗？是哪里没有做对，还是低代码编程本身就不可行？</p><p>我一直没有想通这个问题。虽然不看好，但是依然抱有一丝幻想，也许某一天醒来，低代码编程就成了主流，无论手机 App 还是桌面应用，鼠标拖几下，就可以生成。</p><p>直到上周，我读到一篇文章《低代码编程受困于形式》<a href="https://interjectedfuture.com/visual-programming-is-stuck-on-the-form/%EF%BC%8C%E6%89%8D%E6%81%8D%E7%84%B6%E5%A4%A7%E6%82%9F%EF%BC%8C%E4%BD%8E%E4%BB%A3%E7%A0%81%E7%BC%96%E7%A8%8B%E6%9C%89%E5%85%88%E5%A4%A9%E7%BC%BA%E9%99%B7%EF%BC%8C%E6%81%90%E6%80%95%E4%B8%8D%E4%BC%9A%E6%88%90%E5%8A%9F%E3%80%82">https://interjectedfuture.com/visual-programming-is-stuck-on-the-form/，才恍然大悟，低代码编程有先天缺陷，恐怕不会成功。</a></p><p>文章说，优秀的作品都是形式（form）和功能（function）的统一。形式必须服从功能，功能决定了形式，英文叫做“form follows function”。</p><p>对于优秀的程序员，只要弄清楚了底层，UI（用户界面）就会显而易见。</p><p>低代码编程的问题在于，它是先有 UI（形式），再有代码（功能）。</p><p>用户先拖拉生成 UI，系统再根据 UI 生成代码。这是本末倒置，让底层代码适配 UI，注定了两者都有问题：UI 是空想出来的，代码为了适配 UI，注定冗余和低效。</p><p>所以，优秀的软件不可能用这种方式生成，低代码编程不会成功。</p><p>我认为，他说的很有道理。低代码编程解决不了这个根本缺陷，适用场景有限，大概只适合一些简单任务，或者生成原型，不会成为主流工具。程序员应该谨慎开发这类工具，付出的劳动很可能打水漂。</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Test pages</title>
       <link href="/2025/03/20/Test-pages/"/>
       <url>/2025/03/20/Test-pages/</url>
